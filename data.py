@@ -38,4 +38,5 @@ def get_data(screen_name):
     return data
 
 if __name__ == '__main__':
-    pp(get_data('harrys'))
+    screen_name = 'harrys'
+    get_data(screen_name)

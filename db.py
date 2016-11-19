@@ -1,12 +1,19 @@
-# postgresql tutorial
 import psycopg2
 from data import get_data
 from pprint import pprint as pp
 from ConfigParser import SafeConfigParser
+from datetime import datetime
+import time
+import pytz
 
-# screen_names = ['harys', 'gillette', 'dollarshaveclub', 'SchickHydro']
+def convert_date(s):
+    """Convert Twitter's `created_at` string to python's datetime object."""
+    d = datetime.strptime(s,'%a %b %d %H:%M:%S +0000 %Y').replace(tzinfo=pytz.UTC)
+    return d
+
+
 def populate_db(screen_names):
-    
+    """Insert data to the db."""
     config = SafeConfigParser()
     config.read('config.ini')
     user = config.get('login', 'user')
@@ -27,7 +34,7 @@ def populate_db(screen_names):
            (ID               BIGINT PRIMARY KEY    NOT NULL,
            ACCOUNT           TEXT                  NOT NULL,
            TWEET             TEXT                  NOT NULL,
-           CREATED_AT        TEXT                  NOT NULL,
+           CREATED_AT        TIMESTAMP                  NOT NULL,
            RETWEETS          INT                   NOT NULL,
            FAVES             INT                   NOT NULL);""")
     print "Table created successfully"
@@ -37,16 +44,15 @@ def populate_db(screen_names):
       user_data = get_data(name)
       for u in user_data:
         data.append(u)
-    pp(data)
 
     for row in data:
       print 'xxxxxxxxxxx'
       print 'ROW', row
-      # row example [u'harrys',  u'@nascar_freak Appreciate you. #\U0001f44a', u'Thu Nov 17 16:04:30 +0000 2016', 0, 0]
+      # row example [756884265451790336, u'SchickHydro', u'@DavidJMays Appreciate the love!', u'Sat Jul 23 16:10:45 +0000 2016', 1, 1]
       id = row[0]
       account = row[1]
       tweet = row[2]
-      created_at = row[3]
+      created_at = convert_date(row[3])
       retweets = row[4]
       faves = row[5]
       query = cursor.mogrify("""INSERT INTO ANALYTICS_DATA (
@@ -60,5 +66,5 @@ def populate_db(screen_names):
 
 if __name__ == "__main__":
 
-    screen_names = ['harys', 'gillette', 'dollarshaveclub', 'SchickHydro']
-    populate_db(screen_names)
+    screen_names = ['harrys', 'gillette', 'dollarshaveclub', 'SchickHydro']
+    print populate_db(screen_names)
