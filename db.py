@@ -42,8 +42,6 @@ def populate_db(screen_names):
         data.append(u)
 
     for row in data:
-      #print 'xxxxxxxxxxx'
-      #print 'ROW', row
       # row example [756884265451790336, u'SchickHydro', u'@DavidJMays Appreciate the love!', u'Sat Jul 23 16:10:45 +0000 2016', 1, 1]
       id = row[0]
       account = row[1]
@@ -63,7 +61,7 @@ def populate_db(screen_names):
 def timeblock_dist(acc):
   """ For a given account check how many tweets we observed in each of the 
   6 timeblocks (24 / 4)"""
-  stamps = query_timestamps(acc)
+  stamps = query_tweets(acc)
   timeblocks = []
   for s in stamps:
     stamp = s[0]
@@ -74,7 +72,7 @@ def timeblock_dist(acc):
 def day_of_week_dist(acc):
   """For a given account check how many tweets we observed for each day of 
   week where Monday is 0 and Sunday is 6."""
-  stamps = query_timestamps(acc)
+  stamps = query_tweets(acc)
   days = []
   for s in stamps:
     stamp = s[0]
@@ -89,60 +87,57 @@ def convert_date(s):
     d = datetime.strptime(s,'%a %b %d %H:%M:%S +0000 %Y').replace(tzinfo=pytz.UTC)
     return d
 
-def query_timestamps(acc):
+def query_tweets(acc):
+  """(str) -> list,
+  query the db for `created at`,`retweets` and `faves`.
+  """
   cursor = conn.cursor()
-  cursor.execute('SELECT created_at FROM analytics_data where account =  %s;',(acc,))
+  cursor.execute('SELECT created_at, retweets, faves FROM analytics_data where account =  %s;',(acc,))
   d = cursor.fetchall()
+  #print get_timeblocks(d[0][0])
+  #print d[0][0].weekday()
   return d
+
+def get_faves_and_times(acc):
+  """(str) -> list
+  How many times each tweet was faved."""
+  tweets = query_tweets(acc)
+  faves = [(t[2], t[0].hour) for t in tweets]
+  return faves
+
+def get_retweets_and_times(acc):
+  """(str) -> list
+  How many times each tweet was retweeted."""
+  tweets = query_tweets(acc)
+  ret = [(t[1], t[0].hour) for t in tweets]
+  return ret
+
+"""
+#----THIS BELOW WILL MOST LIKELLY GO
+
+def get_hour(acc):
+  '(str) -> list
+  query the db for the time each tweet was created.'
+  stamps = query_tweets(acc)
+  hours = []
+  for s in stamps:
+    stamp = s[0]
+  return hours
 
 def get_timeblocks(s):
-    """24 hours divided in 6 blocks, 4 hours each."""
-    # get the hour the tweet
+    '(python date object) -> int
+    7 days in a week, 24 hours each divided in 6 blocks, 4 hours each. 
+    We are creating `time of week` where Monday midnight is 0.'
+    # get the hour of the tweet
     r = s.hour
-    return r / 4
-
-def query_retweets(acc):
-  cursor = conn.cursor()
-  cursor.execute('SELECT retweets FROM analytics_data where account =  %s;',(acc,))
-  d = cursor.fetchall()
-  r = []
-  for i in d:
-    r.append(i[0])
-  return r
-
-def query_faves(acc):
-  cursor = conn.cursor()
-  cursor.execute('SELECT faves FROM analytics_data where account =  %s;',(acc,))
-  d = cursor.fetchall()
-  r = []
-  for i in d:
-    r.append(i[0])
-  return r
-
-def query_all():
-  cursor = conn.cursor()
-  cursor.execute('SELECT * FROM analytics_data')
-  d = cursor.fetchall()
-  return d
-
-
+    # get the weekday and the timeblock (Monday is range 0-5, Tuseday is 6-11 etc..)
+    return r / 4 + (6 * s.weekday())
+"""
 if __name__ == "__main__":
-
-    screen_names = ['harrys', 'Gillette', 'DollarShaveClub', 'SchickHydro']
-    #populate_db(screen_names)
     
     val1 = 'harrys'
     val2 = 'DollarShaveClub'
-    print screen_names
-    print ' '
-
-    for n in screen_names:
-      print 'TIMEBLOCKS', timeblock_dist(n)
-    print '___________________'
-    for n in screen_names:
-      print 'DAY_OF_WEEK', day_of_week_dist(n)
-
-    print ' '
-    print 'RETWEETS', query_retweets(val1)
-    print 'FAVES', query_faves(val1)
+    print 'XXXXXX'
+    
+    print get_faves_and_times(val1)
 
