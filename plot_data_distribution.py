@@ -47,63 +47,29 @@ def get_traces(lst, index):
         traces.append(trace)
     return traces
 
-# Create plot for all tweets
-"""
-def get_all_tweets_trace(lst, index):
-    traces = []
-    for i in range(len(lst)):
-        ys, xs = create_axes(lst[i], index)
-        trace = go.Scatter(x=xs,y=ys)
-        traces.append(trace)
-    return traces
-    """
-
-layout = dict(title = 'Engagement on Twitter',
+def get_plot(title, index):
+    layout = dict(title = title,
               xaxis = dict(title = 'Time of day', fixedrange=True),
               yaxis = dict(title = 'Activity', autorange=True),
               )
+    data = get_traces(lst, index)
+    fig = dict(data=data, layout=layout)
+    py.iplot(fig)
+
+# Create plot for all tweets
+title = 'Engagement on Twitter'
 index = 0
-data = get_traces(lst, index)
-fig = dict(data=data, layout=layout)
-py.iplot(fig)
+get_plot(title, index)
 
 # Create plot for retweets
-"""
-def get_retweets_trace(lst, index):
-    traces = []
-    for i in range(len(lst)):
-        ys, xs = create_axes(lst[i], index)
-        trace = go.Scatter(x=xs,y=ys)
-        traces.append(trace)
-    return traces
-"""
-layout = dict(title = 'Engagement on Twitter/ Retweets',
-              xaxis = dict(title = 'Time of day', fixedrange=True),
-              yaxis = dict(title = 'Activity', autorange=True),
-              )
+title = 'Engagement on Twitter/ Retweets'
 index = 1
-data = get_traces(lst, index)
-fig = dict(data=data, layout=layout)
-py.iplot(fig)
+get_plot(title, index)
 
 # Create plot for faves
-"""
-def get_faves_trace(lst, index):
-    traces = []
-    for i in range(len(lst)):
-        ys, xs = create_axes(lst[i], index)
-        trace = go.Scatter(x=xs,y=ys)
-        traces.append(trace)
-    return traces
-"""
-layout = dict(title = 'Engagement on Twitter/ Faves',
-              xaxis = dict(title = 'Time of day', fixedrange=True),
-              yaxis = dict(title = 'Activity', autorange=True),
-              )
+title = 'Engagement on Twitter/ Faves'
 index = 2
-data = get_traces(lst, index)
-fig = dict(data=data, layout=layout)
-py.iplot(fig)
+get_plot(title, index)
 
 
 
