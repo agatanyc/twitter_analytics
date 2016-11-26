@@ -1,0 +1,12 @@
+1. How did you handle Twitter's rate limiting, and what are some options for improving this in the next iteration of this project?
+   - I never reached the limit of allowed requests which is 1500 requests per 15 minutes for the user timeline endpoint. To optimize the number of requests I am requesting 200 tweets per request (max amount) as well as I am checking if I reached the end of the timeline.
+   
+2. How extendible is the software you wrote? How would you make it more reusable?
+   - Make the Twitter hooks configurable. For example allow any Twitter account to be used in the analysis.
+
+3. What's the most flawed piece of the analysis, and how would you improve it if you had
+   more time?
+   - I am analyzing Twitter activity looking at time of day (i.e. 1pm). The analysis would be more complete if I record day of week (i.e. Monday) as well.
+
+4. What would it take to make this a production system used everyday by our marketing team?
+   - Automate the process of creating the plots from the API calls.
