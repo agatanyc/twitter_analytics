@@ -8,13 +8,13 @@ lst = ['harrys', 'Gillette', 'SchickHydro', 'DollarShaveClub']
 
 def get_avarage_traces(lst, i1, i2):
     """(list, int, int) -> list
-    Get average nummber of data points(retweets or faves) by a tweet in a given hour."""
+    Get average number of data points(retweets or faves) by a tweet in a
+    given time a day."""
     traces = []
     for i in range(len(lst)):
-        # create a divt the represents:
+        # `data` is a  dictionary that represents:
         # {the hour the activity occured: [number of: all tweets, retweets, faves]
         data = get_data(lst[i])
-        print data
         xs = []
         ys = []
         for k, v in data.iteritems():
@@ -27,7 +27,7 @@ def get_avarage_traces(lst, i1, i2):
     return traces
 
 # Craete a plot for avarage retweets
-layout = dict(title = 'Avarage retweets',
+layout = dict(title = 'Avarage number of retweets',
               xaxis = dict(title = 'Time of day', fixedrange=True),
               yaxis = dict(title = 'Retweets', autorange=True),
               )
@@ -36,7 +36,7 @@ fig = dict(data=data, layout=layout)
 py.iplot(fig)
 
 # Craete a plot for avarage faves
-layout = dict(title = 'Avarage faves',
+layout = dict(title = 'Avarage number of faves',
               xaxis = dict(title = 'Time of day', fixedrange=True),
               yaxis = dict(title = 'Faves', autorange=True),
               )

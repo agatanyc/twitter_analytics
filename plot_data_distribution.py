@@ -30,7 +30,7 @@ def get_data(acc):
     return d
 
 def create_axes(acc, index):
-    # Pass index 0 for all tweets, 1 for retweets and 2 for faves
+    # Pass index 0 for tweets, 1 for retweets and 2 for faves
     d = get_data(acc)
     ys = []
     xs = []
@@ -56,7 +56,7 @@ def get_plot(title, index):
     fig = dict(data=data, layout=layout)
     py.iplot(fig)
 
-# Create plot for all tweets
+# Create plot for tweets
 title = 'Engagement on Twitter'
 index = 0
 get_plot(title, index)
@@ -70,11 +70,4 @@ get_plot(title, index)
 title = 'Engagement on Twitter/ Faves'
 index = 2
 get_plot(title, index)
-
-
-
-
-
-
-
 
